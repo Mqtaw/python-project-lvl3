@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexlet-code"
-version = "0.1.0"
+version = "0.1.1"
 description = "Download from link"
 authors = ["Mqtaw <mqtaw@yandex.ru>"]
 packages = [
@@ -10,6 +10,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.8"
 requests = "^2.25.1"
+beautifulsoup4 = "^4.9.3"
 
 [tool.poetry.scripts]
 page_loader = "page_loader.scripts.page_loader:main"
