@@ -3,6 +3,10 @@ import requests
 import re
 import os
 from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+
+
+tags_link = {'img': 'src', 'link': 'href', 'script': 'src'}
 
 
 def createParser():
@@ -13,6 +17,20 @@ def createParser():
     return parser
 
 
+def get_link(resource):
+    if tags_link[resource.name] in resource.attrs:
+        return resource[tags_link[resource.name]]
+
+
+def is_content_and_local(link, netloc):
+    o = urlparse(link)
+    if (o.netloc and o.netloc != netloc) or \
+            (o.netloc == netloc and o.path == '/'):
+        return False
+    else:
+        return True
+
+
 def download(link, output='/var/tmp'):
     request = requests.get(link)
     path_to_file = convert_filename(link, output)
@@ -20,16 +38,22 @@ def download(link, output='/var/tmp'):
     soup = BeautifulSoup(request.text, 'html.parser')
     path_to_resources = os.path.splitext(path_to_file)[0]+'_files'
     os.mkdir(path_to_resources)
-    for pic in soup.find_all('img'):
-        file_name = os.path.split(pic.get('src'))[-1]
-        path_to_resource_pic = os.path.join(path_to_resources, file_name)
-        link_to_resource_pic = link + pic.get('src')
-        changed_link = os.path.join(os.path.split(path_to_resources)[-1],
-                                    file_name)
-        r_request = requests.get(link_to_resource_pic)
-        with open(path_to_resource_pic, "wb") as f:
-            f.write(r_request.content)
-        pic['src'] = changed_link
+    netloc = urlparse(link).netloc
+    for resource in soup.find_all(['img', 'link', 'script']):
+        res_link = get_link(resource)
+        if res_link and is_content_and_local(res_link, netloc):
+            file_name = os.path.split(resource.get(
+                tags_link[resource.name]))[-1]
+            path_to_resource = os.path.join(path_to_resources, file_name)
+            link_to_resource = link + resource.get(tags_link[resource.name])
+            # Тут нужно поправить случай. если придет ссылка
+            # абсолютная на локальный ресурс
+            changed_link = os.path.join(os.path.split(path_to_resources)[-1],
+                                        file_name)
+            r_request = requests.get(link_to_resource)
+            with open(path_to_resource, "wb") as f:
+                f.write(r_request.content)
+            resource[tags_link[resource.name]] = changed_link
     with open(path_to_file, "w") as f:
         f.write(soup.prettify(formatter="html5"))
     return path_to_file
