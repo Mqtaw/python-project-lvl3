@@ -12,6 +12,7 @@ package-install:
 
 lint:
 	poetry run flake8 page_loader
+	poetry run flake8 tests
 
 test:
 	env PYTHONPATH=. poetry run pytest tests -vv
@@ -20,11 +21,14 @@ test-cov:
 	env PYTHONPATH=. poetry run pytest --cov page_loader tests/ --cov-report xml
 
 try:
-	poetry run page_loader https://ru.code-basics.com
+	poetry run page_loader https://ru.code-basics.com/
 
 try1:
 	poetry run page_loader https://ru.hexlet.io/programs
 
 try2:
-	poetry run page_loader https://www.test.com
+	poetry run page_loader https://page-loader.hexlet.repl.co
+
+try3:
+	poetry run page_loader https://www.ikea.com/ru/ru
 
