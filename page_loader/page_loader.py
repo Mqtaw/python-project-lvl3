@@ -39,6 +39,8 @@ def download(link, output='/var/tmp', download_res='yes'):
     link = link[:-1] if link[-1] == '/' else link
     logging.info('download, start')
     request = requests.get(link)
+    if request.status_code != 200:
+        raise Exception('Status code = {}'.format(request.status_code))
     path_to_file = convert_filename(link, output)
     print(path_to_file)
     soup = BeautifulSoup(request.text, 'html.parser')

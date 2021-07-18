@@ -79,11 +79,11 @@ def test_exception_ConnectionError():
         download('https://page-loaer.hexet.rep.co/', output='nodir')
 
 
-# def test_exception_ConnectionError2(requests_mock):
-#    link = 'https://page-loader.hexlet.repl.co/'
-#    requests_mock.get(link, status_code=404)
-#    #with pytest.raises(Exception):
-#    download('https://page-loader.hexlet.repl.co/')
+def test_exception_ConnectionError2(requests_mock):
+    link = 'https://page-loader.hexlet.repl.co/'
+    requests_mock.get(link, status_code=404)
+    with pytest.raises(Exception):
+        download('https://page-loader.hexlet.repl.co/')
 
 
 def test_get_link():

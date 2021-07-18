@@ -1,4 +1,12 @@
-2021-07-18 20:45:58,776 INFO started
-2021-07-18 20:45:58,776 INFO parser, start
-2021-07-18 20:45:58,777 INFO parser, finish
-2021-07-18 20:45:58,777 INFO download, start
+2021-07-18 22:23:03,121 INFO started
+2021-07-18 22:23:03,122 INFO parser, start
+2021-07-18 22:23:03,123 INFO parser, finish
+2021-07-18 22:23:03,123 INFO download, start
+2021-07-18 22:23:06,619 INFO resource_download, start
+2021-07-18 22:23:06,619 INFO download, finish
+2021-07-18 22:23:06,620 INFO resource: /assets/application.css
+2021-07-18 22:23:07,055 INFO resource: /courses
+2021-07-18 22:23:07,701 INFO resource: /assets/professions/nodejs.png
+2021-07-18 22:23:08,179 INFO resource: /script.js
+2021-07-18 22:23:08,632 INFO download, finish
+2021-07-18 22:23:08,632 INFO finished

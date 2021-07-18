@@ -29,7 +29,6 @@ def main():
     except Exception as ex:
         logging.critical(ex)
         sys.exit(1)
-
     logging.info('finished')
 
 
