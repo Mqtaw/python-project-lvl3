@@ -5,6 +5,7 @@ import os
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import logging
+from progress.bar import ChargingBar
 
 
 tags_link = {'img': 'src', 'link': 'href', 'script': 'src'}
@@ -57,6 +58,7 @@ def download(link, output='/var/tmp', download_res='yes'):
 
 
 def download_resources(resources, path_to_resources, link):
+    bar = ChargingBar('download resources', max=len(resources))
     for resource in resources:
         res_link = get_link(resource)
         if res_link and is_content_and_local(res_link, urlparse(link).netloc):
@@ -73,6 +75,8 @@ def download_resources(resources, path_to_resources, link):
             with open(path_to_resource, "wb") as f:
                 f.write(r_request.content)
             resource[tags_link[resource.name]] = changed_link
+        bar.next()
+    bar.finish()
 
 
 def convert_filename(link, output=''):

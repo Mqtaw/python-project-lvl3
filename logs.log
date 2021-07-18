@@ -1,6 +1,10 @@
-2021-07-15 22:03:19,904 INFO started
-2021-07-15 22:03:19,904 INFO parser, start
-2021-07-15 22:03:19,905 INFO parser, finish
-2021-07-15 22:03:19,906 INFO download, start
-2021-07-15 22:03:19,912 ERROR Connection Error
-2021-07-15 22:03:19,913 INFO finished
+2021-07-18 15:11:05,078 INFO started
+2021-07-18 15:11:05,078 INFO parser, start
+2021-07-18 15:11:05,079 INFO parser, finish
+2021-07-18 15:11:05,079 INFO download, start
+2021-07-18 15:11:05,475 INFO resource_download, start
+2021-07-18 15:11:05,496 INFO download, finish
+2021-07-18 15:11:05,507 INFO resource: https://ru.hexlet.io/lessons.rss
+2021-07-18 15:11:05,706 INFO resource: https://ru.hexlet.io/programs
+2021-07-18 15:11:06,001 INFO download, finish
+2021-07-18 15:11:06,002 INFO finished
