@@ -2,6 +2,8 @@
 from page_loader.page_loader import createParser
 from page_loader.page_loader import download
 import logging
+import requests
+import sys
 
 
 def main():
@@ -13,7 +15,17 @@ def main():
     args = parser.parse_args()
     link = args.link
     output_path = args.output
-    download(link, output_path)
+    try:
+        download(link, output_path)
+    except FileNotFoundError:
+        logging.error('no such directory')
+        sys.exit(1)
+    except FileExistsError:
+        logging.error('already downloaded')
+        sys.exit(1)
+    except  requests.exceptions.ConnectionError:
+        logging.error('Connection Error')
+        sys.exit(1)
     logging.info('finished')
 
 

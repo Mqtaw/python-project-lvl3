@@ -22,7 +22,7 @@ def createParser():
 
 def get_link(resource):
     if tags_link[resource.name] in resource.attrs:
-        return resource[tags_link[resource.name]]
+        return resource.get(tags_link[resource.name])
 
 
 def is_content_and_local(link, netloc):
@@ -34,7 +34,7 @@ def is_content_and_local(link, netloc):
         return True
 
 
-def download(link, output='/var/tmp'):
+def download(link, output='/var/tmp', download_res='yes'):
     link = link[:-1] if link[-1] == '/' else link
     logging.info('download, start')
     request = requests.get(link)
@@ -43,33 +43,36 @@ def download(link, output='/var/tmp'):
     soup = BeautifulSoup(request.text, 'html.parser')
     path_to_resources = os.path.splitext(path_to_file)[0]+'_files'
     os.mkdir(path_to_resources)
-    netloc = urlparse(link).netloc
     logging.info('resource_download, start')
     with open(path_to_file, "w") as f:
         f.write(soup.prettify(formatter="html5"))
     logging.info('download, finish')
-    for resource in soup.find_all(['img', 'link', 'script']):
+    resources = soup.find_all(['img', 'link', 'script'])
+    if resources and download_res == 'yes':
+        download_resources(resources, path_to_resources, link)
+    with open(path_to_file, "w") as f:
+        f.write(soup.prettify(formatter="html5"))
+    logging.info('download, finish')
+    return path_to_file
+
+
+def download_resources(resources, path_to_resources, link):
+    for resource in resources:
         res_link = get_link(resource)
-        if res_link and is_content_and_local(res_link, netloc):
+        if res_link and is_content_and_local(res_link, urlparse(link).netloc):
             logging.info('resource: ' + res_link)
-            file_name = convert_filename(link+resource.get(
-                tags_link[resource.name]))
+            file_name = convert_filename(link+res_link)
             path_to_resource = os.path.join(path_to_resources, file_name)
-            if link in resource.get(tags_link[resource.name]):
-                link_to_resource = resource.get(tags_link[resource.name])
+            if link in res_link:
+                link_to_resource = res_link
             else:
-                link_to_resource = link + resource.get(
-                    tags_link[resource.name])
+                link_to_resource = link + res_link
             changed_link = os.path.join(os.path.split(path_to_resources)[-1],
                                         file_name)
             r_request = requests.get(link_to_resource)
             with open(path_to_resource, "wb") as f:
                 f.write(r_request.content)
             resource[tags_link[resource.name]] = changed_link
-    with open(path_to_file, "w") as f:
-        f.write(soup.prettify(formatter="html5"))
-    logging.info('download, finish')
-    return path_to_file
 
 
 def convert_filename(link, output=''):
