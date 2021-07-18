@@ -23,7 +23,7 @@ def main():
     except FileExistsError:
         logging.error('already downloaded')
         sys.exit(1)
-    except  requests.exceptions.ConnectionError:
+    except requests.exceptions.ConnectionError:
         logging.error('Connection Error')
         sys.exit(1)
     logging.info('finished')

@@ -2,9 +2,9 @@ import os.path
 from page_loader.page_loader import download
 import tempfile
 import sys
-from os import listdir
 import requests
 import pytest
+
 
 @pytest.fixture
 def response():
@@ -27,10 +27,11 @@ def test(requests_mock, response):
         print(logs)
 
         assert response == downloaded
-        #assert len(listdir(os.path.join(
+        # assert len(listdir(os.path.join(
         #    sys.path[0], 'fixtures/page-loader-hexlet-repl-co_files'))) ==\
         #    len(listdir(os.path.join(
         #        tmpdir, 'page-loader-hexlet-repl-co_files')))
+
 
 def test_exception_FileNotFoundError(requests_mock):
     requests_mock.get('https://page-loader.hexlet.repl.co/', text='response')
@@ -44,9 +45,9 @@ def test_exception_FileExistsError(requests_mock, response):
     with pytest.raises(FileExistsError):
         with tempfile.TemporaryDirectory(dir=sys.path[0]) as tmpdir:
             with open(download(link, tmpdir, download_res='no')) as f2:
-                downloaded = f2.read()
+                f2.read()
             with open(download(link, tmpdir, download_res='no')) as f2:
-                downloaded = f2.read()
+                f2.read()
 
 
 def test_exception_ConnectionError():
