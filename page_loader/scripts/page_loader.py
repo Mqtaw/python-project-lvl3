@@ -26,8 +26,8 @@ def main():
     except requests.exceptions.ConnectionError:
         logging.error('Connection Error')
         sys.exit(1)
-    except requests.exceptions.RequestException:
-        logging.error('requests Error')
+    except Exception as ex:
+        logging.critical(ex)
         sys.exit(1)
 
     logging.info('finished')
