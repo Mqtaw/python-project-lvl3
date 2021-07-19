@@ -60,7 +60,7 @@ def download(link, output='/var/tmp', download_res='yes'):
     path_to_file = convert_filename(link, output)
     print(path_to_file)
     soup = BeautifulSoup(request.text, 'html.parser')
-    path_to_resources = os.path.splitext(path_to_file)[0]+'_files'
+    path_to_resources = os.path.splitext(path_to_file)[0] + '_files'
     os.mkdir(path_to_resources)
     logging.info('resource_download, start')
     with open(path_to_file, "w") as f:
