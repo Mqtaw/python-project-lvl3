@@ -26,6 +26,8 @@ def get_link(resource, link):
         res_link = resource.get(tags_link[resource.name])
         main_link_parse = urlparse(link)
         parse = urlparse(res_link)
+        if parse.netloc and main_link_parse.netloc != parse.netloc:
+            return res_link
         if parse.path[0] == '/':
             path = parse.path
         else:

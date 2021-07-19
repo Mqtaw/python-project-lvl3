@@ -18,7 +18,8 @@ def test_get_link(response):
         'https://page-loader.hexlet.repl.co/courses',
         'https://page-loader.hexlet.repl.co/dir/courses',
         'https://page-loader.hexlet.repl.co/assets/professions/nodejs.png',
-        'https://page-loader.hexlet.repl.co/script.js'
+        'https://page-loader.hexlet.repl.co/script.js',
+        'https://hexlet.repl.co/courses'
     ]
     soup = BeautifulSoup(response, 'html.parser')
     links = soup.find_all(['img', 'link', 'script'])
