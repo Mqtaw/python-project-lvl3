@@ -21,14 +21,28 @@ def createParser():
     return parser
 
 
-def get_link(resource):
+def get_link(resource, link):
     if tags_link[resource.name] in resource.attrs:
-        return resource.get(tags_link[resource.name])
+        res_link = resource.get(tags_link[resource.name])
+        main_link_parse = urlparse(link)
+        parse = urlparse(res_link)
+        if parse.path[0] == '/':
+            path = parse.path
+        else:
+            path = main_link_parse.path + parse.path if  \
+                main_link_parse.path[-1] == '/' else \
+                main_link_parse.path + '/' + parse.path
+
+        result = main_link_parse._replace(path=path,
+                                          params=parse.params,
+                                          query=parse.query,
+                                          fragment=parse.fragment)
+        return result.geturl()
 
 
 def is_content_and_local(link, netloc):
     o = urlparse(link)
-    if (o.netloc and o.netloc != netloc) or \
+    if (o.netloc != netloc) or \
             (o.netloc == netloc and o.path == '/'):
         return False
     else:
@@ -62,18 +76,14 @@ def download(link, output='/var/tmp', download_res='yes'):
 def download_resources(resources, path_to_resources, link):
     bar = ChargingBar('download resources', max=len(resources))
     for resource in resources:
-        res_link = get_link(resource)
-        if res_link and is_content_and_local(res_link, urlparse(link).netloc):
+        res_link = get_link(resource, link)
+        if is_content_and_local(res_link, urlparse(link).netloc):
             logging.info('resource: ' + res_link)
-            file_name = convert_filename(link+res_link)
+            file_name = convert_filename(res_link)
             path_to_resource = os.path.join(path_to_resources, file_name)
-            if link in res_link:
-                link_to_resource = res_link
-            else:
-                link_to_resource = link + res_link
             changed_link = os.path.join(os.path.split(path_to_resources)[-1],
                                         file_name)
-            r_request = requests.get(link_to_resource)
+            r_request = requests.get(res_link)
             with open(path_to_resource, "wb") as f:
                 f.write(r_request.content)
             resource[tags_link[resource.name]] = changed_link

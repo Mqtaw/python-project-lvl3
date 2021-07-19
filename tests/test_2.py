@@ -1,6 +1,5 @@
 import os.path
 from page_loader.page_loader import download
-from page_loader.page_loader import get_link
 from page_loader.page_loader import is_content_and_local
 from page_loader.page_loader import convert_filename
 from os import listdir
@@ -8,7 +7,6 @@ import tempfile
 import sys
 import requests
 import pytest
-from bs4 import BeautifulSoup
 
 
 @pytest.fixture
@@ -86,28 +84,16 @@ def test_exception_ConnectionError2(requests_mock):
         download('https://page-loader.hexlet.repl.co/')
 
 
-def test_get_link():
-    html_doc = '<link href="page-loader-hexlet-repl-co_files/' \
-               'page-loader-hexlet-repl-co-assets-application.css"' \
-               ' media="all" rel="stylesheet">'
-    soup = BeautifulSoup(html_doc, 'html.parser')
-    tag = soup.link
-    link = 'page-loader-hexlet-repl-co_files/' \
-           'page-loader-hexlet-repl-co-assets-application.css'
-    assert get_link(tag) == link
-
-
-def test_id_content_and_local():
+def test_is_content_and_local():
     resources = [
-        ("/assets/application.css", True),
-        ("/courses", True),
-        ("/professions/nodejs", True),
-        ("/professions/nodejs", True),
+        ("https://page-loader.hexlet.repl.co/assets/application.css", True),
+        ("https://page-loader.hexlet.repl.co/courses", True),
         ("https://page-loader.hexlet.repl.co/professions/nodejs", True),
         ("https://pageloader.hexlet.repl.co/professions/nodejs", False),
         ("https://pageloader.hexlet.repl.co/", False)
     ]
     for res in resources:
+        print(res)
         assert is_content_and_local(
             res[0], 'page-loader.hexlet.repl.co') == res[1]
 
